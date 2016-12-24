@@ -20,6 +20,7 @@ defmodule AclIvanBot.Reports do
         )
     end)
     |> Enum.join("\n")
+    |> String.trim_trailing
   end
 
   def format_report(report) do

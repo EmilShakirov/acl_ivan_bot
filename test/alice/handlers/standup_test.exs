@@ -7,54 +7,61 @@ end
 
 defmodule Alice.Handlers.StandupTest do
   @user_id "U123456"
-  @report """
-  *Projects:*
-
-
-  *IVAN:*
-  report
-
-
-
-  *Results:*
-
-  Team didn't send any reports yet
-
-
-
-  *Risks:*
-
-  Team didn't send any reports yet
-
-
-  """
 
   use ExUnit.Case, async: true
   alias Alice.Handlers.Standup
   alias Alice.Conn
   import AclIvanBot.DateHelper
+  import ExUnit.TestHelpers
 
-  def conn do
-    %Alice.Conn{
+  defp conn do
+    %Conn{
       message: %{user: @user_id, text: "test", channel: :channel, captures: ["projects"]},
-      slack: %{users: %{@user_id => %{name: "Ivan"}}},
-      state: %{today => %{"projects" => %{@user_id => "report"}}}
+      slack: %{users: %{@user_id => %{name: "Ivan", id: "ivan"}}},
+      state: %{
+        today => %{"projects" => %{@user_id => "report"}},
+        yesterday => %{"projects" => %{@user_id => "yesterday's report"}}
+      }
     }
   end
 
-  def guide do
-    EEx.eval_file("templates/guide.eex")
+  setup_all do
+    {:ok, conn: conn}
   end
 
-  test "guide/1" do
-    Standup.guide(conn)
+  describe "guide/1" do
+    test "replies with guide", state do
+      guide = EEx.eval_file("templates/guide.eex")
+      Standup.guide(state[:conn])
 
-    assert_received {:msg, guide}
+      assert_received {:msg, ^guide}
+    end
   end
 
-  test "daily_report/1" do
-    Standup.daily_report(conn)
+  describe "daily_report/1" do
+    test "generates daily report", state do
+      report = "daily_report.txt" |> load_fixture |> String.trim_trailing
+      Standup.daily_report(state[:conn])
 
-    assert_received {:msg, @report}
+      assert_received {:msg, ^report}
+    end
+  end
+
+  describe "yesterday_report/1" do
+    test "generates yesterday report", state do
+      report = "yesterday_report.txt" |> load_fixture |> String.trim_trailing
+      Standup.yesterday_report(state[:conn])
+
+      assert_received {:msg, ^report}
+    end
+  end
+
+  describe "standup/1" do
+    test "says thanks after receiving standup report", state do
+      thanks = "Thank you for your report, <@ivan>"
+      Standup.standup(state[:conn])
+
+      assert_received {:msg, ^thanks}
+    end
   end
 end

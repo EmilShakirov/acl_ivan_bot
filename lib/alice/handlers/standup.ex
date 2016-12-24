@@ -10,7 +10,7 @@ defmodule Alice.Handlers.Standup do
 
   alias Alice.Conn
   alias Alice.StateBackends
-  import AclIvanBot.DateHelper, only: [today: 0, yesterday: 0]
+  import AclIvanBot.DateHelper
   import AclIvanBot.Reports
   use Alice.Router
 
@@ -25,7 +25,7 @@ defmodule Alice.Handlers.Standup do
     |> reply(conn)
   end
 
-  def guide(conn), do: EEx.eval_file("templates/guide.eex") |> reply(conn)
+  def guide(conn), do: "templates/guide.eex" |> EEx.eval_file |> reply(conn)
 
   def standup(conn) do
     response = if valid_project_name?(conn) do
