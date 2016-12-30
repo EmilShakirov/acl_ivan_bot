@@ -29,6 +29,8 @@ defmodule Andriy.Mixfile do
        {:timex, "~> 3.0"},
        {:websocket_client, "~> 1.1.0"},
        {:jira, "~> 0.0.8"},
+       {:earmark, "~> 0.1", only: :dev},
+       {:ex_doc, "~> 0.11", only: :dev},
      ]
   end
 end

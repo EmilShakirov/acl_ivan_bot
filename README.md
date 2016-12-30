@@ -27,4 +27,7 @@ mix test
 
 # run codestyle linter
 mix credo
+
+# generate documentation
+mix docs
 ```
