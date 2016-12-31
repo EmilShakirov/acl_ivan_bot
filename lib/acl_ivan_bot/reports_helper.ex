@@ -11,13 +11,15 @@ defmodule AclIvanBot.ReportsHelper do
 
   ## Examples
 
-    iex> AclIvanBot.ReportsHelper.fetch_name(%{"1" => %{ profile: %{ first_name: 'Ivan' }}}, "1")
+    iex> users = %{"U32FGC7UG" => %{ profile: %{ first_name: 'Ivan' }}}
+    ...> AclIvanBot.ReportsHelper.fetch_name(users, "U32FGC7UG")
     "IVAN"
 
-    iex> AclIvanBot.ReportsHelper.fetch_name(%{"2" => %{ name: 'Petr' }}, "2")
+    iex> users = %{"U32FGC7UG" => %{ name: 'Petr' }}
+    ...> AclIvanBot.ReportsHelper.fetch_name(users, "U32FGC7UG")
     "PETR"
 
-    iex> AclIvanBot.ReportsHelper.fetch_name(%{}, "3")
+    iex> AclIvanBot.ReportsHelper.fetch_name(%{}, "U32FGC7UG")
     ""
 
   """
