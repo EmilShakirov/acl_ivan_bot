@@ -1,19 +1,24 @@
 defmodule AclIvanBot.ReportsHelper do
-  @moduledoc """
+  @moduledoc ~S"""
   Helper methods for report handling
   """
 
-  @doc """
+  @doc ~S"""
   Fetches `user` by its id
+
   Returns `user.profile.first_name` or `user.name` in case `user.profile.first_name` is not present
+  Returns empty string if no user has been found
 
   ## Examples
 
-    iex> AclIvanBot.ReportsHelper.fetch_name(%{"U32" => %{ profile: %{ first_name: 'Ivan' }}}, "U32")
+    iex> AclIvanBot.ReportsHelper.fetch_name(%{"1" => %{ profile: %{ first_name: 'Ivan' }}}, "1")
     "IVAN"
 
-    iex> AclIvanBot.ReportsHelper.fetch_name(%{"U33" => %{ name: 'Petr' }}, "U33")
+    iex> AclIvanBot.ReportsHelper.fetch_name(%{"2" => %{ name: 'Petr' }}, "2")
     "PETR"
+
+    iex> AclIvanBot.ReportsHelper.fetch_name(%{}, "3")
+    ""
 
   """
   @spec fetch_name(map(), String.t) :: String.t
