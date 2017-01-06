@@ -68,18 +68,26 @@ defmodule IvanBot.Reports do
   end
 
   defp represent_jira_issue({issue, index}) do
+    [number | custom_status] = String.split(issue, [";", "@", "#"], trim: true)
+
     %{"fields" => %{
         "summary" => summary,
         "status" => %{"name" => status}
       }
     } = Jira.API.ticket_details(issue)
 
+    status = if length(custom_status) > 0 do
+              custom_status
+            else
+              status
+            end
+
     EEx.eval_file(
       "templates/jira_issue.eex",
       [
         index: index,
-        issue: issue,
-        link: "#{Application.get_env(:jira, :host)}/browse/#{issue}",
+        issue: number,
+        link: "#{Application.get_env(:jira, :host)}/browse/#{number}",
         status: status,
         summary: summary
       ])
