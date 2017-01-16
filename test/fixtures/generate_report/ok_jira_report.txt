@@ -4,7 +4,7 @@
 *MICHAEL:*
 1) XD-666 SUMMARY
 /browse/XD-666
-Status: Go go PR
+Status: Go go PR, Continue
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 2) XD-333 SUMMARY

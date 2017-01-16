@@ -37,7 +37,6 @@ defmodule IvanBot.Reports do
       %{"fields" => fields} ->
         %{"summary" => summary, "status" => %{"name" => status}} = fields
         {:ok, status, summary}
-
       %{"errorMessages" => errorMessages} -> {:error, errorMessages}
     end
   end
@@ -70,9 +69,13 @@ defmodule IvanBot.Reports do
     |> Enum.with_index(1)
     |> Enum.map(&(Task.async(fn -> represent_jira_issue(&1) end)))
     |> Enum.map(&Task.await/1)
+    |> Enum.filter(fn(item) -> String.length(item) > 0 end)
     |> Enum.join("\n")
   end
 
+  defp represent_jira_issue({";", _index}), do: ""
+  defp represent_jira_issue({",", _index}), do: ""
+  defp represent_jira_issue({"", _index}), do: ""
   defp represent_jira_issue({issue, index}) do
     [number | custom_status] = issue
                               |> String.trim
